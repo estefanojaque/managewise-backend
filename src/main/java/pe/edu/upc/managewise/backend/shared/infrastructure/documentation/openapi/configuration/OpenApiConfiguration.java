@@ -10,19 +10,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
     @Bean
-    public OpenAPI learningPlatformOpenApi() {
+    public OpenAPI managewiseBackendOpenApi() {
         // General configuration
         var openApi = new OpenAPI();
         openApi
                 .info(new Info()
-                        .title("Learning Platform API")
-                        .description("Learning Platform application REST API documentation.")
+                        .title("Managewise Backend API")
+                        .description("Managewise backend REST API documentation.")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0")
                                 .url("https://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("Learning Platform Documentation")
-                        .url("https://github.com/upc-is-si729/daos-language-reference"));
+                        .description("Managewise Backend Documentation")
+                        .url("https://github.com/Horizon-ManageWise/managewise-backend/tree/develop"));
         return openApi;
     }
 }
