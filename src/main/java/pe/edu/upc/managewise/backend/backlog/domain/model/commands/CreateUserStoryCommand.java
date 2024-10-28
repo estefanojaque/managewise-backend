@@ -1,4 +1,4 @@
 package pe.edu.upc.managewise.backend.backlog.domain.model.commands;
 
-public record CreateUserStoryCommand(Long epicId, String name, String description) {
+public record CreateUserStoryCommand(String title, String description) {
 }
