@@ -9,7 +9,5 @@ import pe.edu.upc.managewise.backend.shared.domain.model.aggregates.AuditableAbs
 @Table(name = "product_backlog")
 public class ProductBacklog extends AuditableAbstractAggregateRoot<ProductBacklog> {
 
-@Embedded
-private TaskList taskList;
 
 }

@@ -42,7 +42,15 @@ public class Task extends AuditableModel {
         this.status = Status.TO_DO;
     }
 
-
     public Task() {
+    }
+
+    public void update(String title, String description) {
+        this.title = new Title(title);
+        this.description = new Description(description);
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
     }
 }

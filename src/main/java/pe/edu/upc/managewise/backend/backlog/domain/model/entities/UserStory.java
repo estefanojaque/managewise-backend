@@ -23,15 +23,6 @@ public class UserStory extends AuditableModel {
     @NotNull
     private Epic epic;
 
-    @ManyToOne
-    @JoinColumn(name = "sprint_id")
-    @NotNull
-    private SprintBacklog sprint;
-
-    /*relacion a sprint backlog*/
-    @ManyToOne
-    private SprintBacklog sprintBacklog;
-
     @Embedded
     private TaskList taskList;
 
@@ -58,5 +49,26 @@ public class UserStory extends AuditableModel {
     }
 
     public UserStory() {
+    }
+
+    public void update(String title, String description) {
+        this.title = new Title(title);
+        this.description = new Description(description);
+    }
+
+    public void addTask(String title, String description){
+        taskList.addTask(this, title, description);
+    }
+
+    public void removeTask(Long taskId){
+        taskList.removeTask(taskId);
+    }
+
+    public void updateTask(Long taskId, String title, String description){
+        taskList.updateTask(taskId, title, description);
+    }
+
+    public Task getTask(Long taskId){
+        return taskList.getTask(taskId);
     }
 }
