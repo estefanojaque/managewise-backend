@@ -8,3 +8,5 @@ public class UpdateEpicCommandFromResourceAssembler {
         return new UpdateEpicCommand(id, resource.title(), resource.description());
     }
 }
+
+
