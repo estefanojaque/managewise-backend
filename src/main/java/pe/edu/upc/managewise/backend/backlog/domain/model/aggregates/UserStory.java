@@ -76,4 +76,12 @@ public class UserStory extends AuditableAbstractAggregateRoot<UserStory> {
         return this;
     }
 
+    public void addTaskToTaskList(String title, String description, Integer estimation){
+        this.taskList.addToTaskList(this, title, description, estimation);
+    }
+
+    public void getTaskItemWithTaskId(Long taskId){
+        this.taskList.getTaskItemWithTaskId(taskId);
+    }
+
 }

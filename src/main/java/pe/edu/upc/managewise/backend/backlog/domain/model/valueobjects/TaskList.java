@@ -37,6 +37,14 @@ public class TaskList {
                 .ifPresent(task -> task.UpdateInformation(title, description, estimation));
     }
 
+    //getTaskItemWithTaskId
+    public TaskItem getTaskItemWithTaskId(Long taskId){
+        return tasks.stream()
+                .filter(task -> task.getId().equals(taskId))
+                .findFirst()
+                .orElse(null);
+    }
+
     /*
     public void updateTaskStatus(Long taskId, Status status){
         tasks.stream()

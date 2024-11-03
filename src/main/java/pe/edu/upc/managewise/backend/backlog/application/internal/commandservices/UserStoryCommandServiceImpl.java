@@ -2,6 +2,7 @@ package pe.edu.upc.managewise.backend.backlog.application.internal.commandservic
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
+import pe.edu.upc.managewise.backend.backlog.domain.model.commands.AddTaskITemToUserStoryTaskListCommand;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateUserStoryCommand;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.DeleteUserStoryCommand;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.UpdateUserStoryCommand;
@@ -66,6 +67,23 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
             this.userStoryRepository.deleteById(command.userStoryId());
         } catch (Exception e){
             throw new IllegalArgumentException("Error while deleting userStory: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void handle(AddTaskITemToUserStoryTaskListCommand command){
+        if(!userStoryRepository.existsById(command.userStoryId())){
+            throw new IllegalArgumentException("UserStory with id " + command.userStoryId() + " does not exist");
+        }
+        try{
+            userStoryRepository.findById(command.userStoryId()).map(userStory -> {
+                userStory.addTaskToTaskList(command.title(), command.description(), command.estimation());
+                userStoryRepository.save(userStory);
+                System.out.println("Task added to userStory task list");
+                return userStory;
+            });
+        }catch (Exception e){
+            throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
         }
     }
 }
