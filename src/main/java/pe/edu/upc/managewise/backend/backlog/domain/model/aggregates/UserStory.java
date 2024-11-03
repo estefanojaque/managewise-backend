@@ -3,8 +3,7 @@ package pe.edu.upc.managewise.backend.backlog.domain.model.aggregates;
 import jakarta.persistence.*;
 import lombok.Getter;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects.Status;
-import pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects.TaskList;
+import pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects.*;
 import pe.edu.upc.managewise.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 import java.util.ArrayList;
@@ -23,42 +22,53 @@ public class UserStory extends AuditableAbstractAggregateRoot<UserStory> {
 
     private Status status;
 
-    @Embedded
-    private final TaskList taskList;
+    /*
+    @ManyToOne
+    private Epic epic;
+    */
+    private Long epicId;
 
     /*
-    @ElementCollection
-    private List<Long> taskIds = new ArrayList<>();
+    @ManyToOne
+    private SprintBacklog sprintBacklog;
     */
+    private Long sprintBacklogId;
 
-    public UserStory(String title, String description) {
-        this.title = title;
-        this.description = description;
-        this.taskList = new TaskList();
-        this.status = Status.TO_DO;
-    }
+    //cambiar Integer a storypoints
+    private Integer effort;
+
+    @Embedded
+    private final TaskList taskList;
 
     public UserStory() {
         this.taskList = new TaskList();
     }
 
-    /*create*/
+    public UserStory(String title, String description, Long epicId, Long sprintBacklogId, Integer effort) {
+        this.title = title;
+        this.description = description;
+        this.status = Status.TO_DO;
+        this.epicId = epicId;
+        this.sprintBacklogId = sprintBacklogId;
+        this.effort = effort;
+        this.taskList = new TaskList();
+    }
+
     public UserStory(CreateUserStoryCommand command){
         this();
         this.title = command.title();
         this.description = command.description();
+        this.status = Status.TO_DO;
+        this.epicId = command.epicId();
+        this.sprintBacklogId = command.sprintBacklogId();
+        this.effort = command.effort();
     }
 
-    /*update*/
+    /*de momento solo se puede actualizar el titulo y descripcion*/
     public UserStory updateInformation(String title, String description){
         this.title = title;
         this.description = description;
         return this;
     }
-
-    /*
-    public void addTaskToUserStory(String title, String description){
-        taskList.addToTaskList(this, title, description);
-    }*/
 
 }

@@ -6,9 +6,6 @@ import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateEpicCom
 import pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects.Status;
 import pe.edu.upc.managewise.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Entity
 public class Epic extends AuditableAbstractAggregateRoot<Epic> {
@@ -22,8 +19,8 @@ public class Epic extends AuditableAbstractAggregateRoot<Epic> {
 
     private Status status;
 
-    @ElementCollection
-    private List<Long> userStoryIds = new ArrayList<>();
+    public Epic() {
+    }
 
     public Epic(String title, String description) {
         this.title = title;
@@ -31,18 +28,11 @@ public class Epic extends AuditableAbstractAggregateRoot<Epic> {
         this.status = Status.TO_DO;
     }
 
-    public Epic() {
-    }
-
-    /*create*/
-
     public Epic(CreateEpicCommand command){
         this();
         this.title = command.title();
         this.description = command.description();
     }
-
-    /*update*/
 
     public Epic updateInformation(String title, String description){
         this.title = title;
@@ -50,4 +40,10 @@ public class Epic extends AuditableAbstractAggregateRoot<Epic> {
         return this;
     }
 
+    /*
+    public Epic updateStatus(Status status){
+        this.status = status;
+        return this;
+    }
+    */
 }
