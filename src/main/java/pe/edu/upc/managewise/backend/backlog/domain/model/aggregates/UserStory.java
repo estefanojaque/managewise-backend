@@ -20,36 +20,40 @@ public class UserStory extends AuditableAbstractAggregateRoot<UserStory> {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     /*
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "epic_id", referencedColumnName = "epicId")
     private Epic epic;
     */
     private Long epicId;
 
     /*
-    @ManyToOne
-    private SprintBacklog sprintBacklog;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sprint_id", referencedColumnName = "sprintId")
+    private Sprint sprint;
     */
-    private Long sprintBacklogId;
+    private Long sprintId;
 
-    //cambiar Integer a storypoints
+    //en un fururo cambiar a storypoints
     private Integer effort;
 
     @Embedded
-    private final TaskList taskList;
+    private TaskList taskList;
 
     public UserStory() {
         this.taskList = new TaskList();
+        this.status = Status.TO_DO;
     }
 
-    public UserStory(String title, String description, Long epicId, Long sprintBacklogId, Integer effort) {
+    public UserStory(String title, String description, Long epicId, Long sprintId, Integer effort) {
         this.title = title;
         this.description = description;
         this.status = Status.TO_DO;
         this.epicId = epicId;
-        this.sprintBacklogId = sprintBacklogId;
+        this.sprintId = sprintId;
         this.effort = effort;
         this.taskList = new TaskList();
     }
@@ -60,8 +64,9 @@ public class UserStory extends AuditableAbstractAggregateRoot<UserStory> {
         this.description = command.description();
         this.status = Status.TO_DO;
         this.epicId = command.epicId();
-        this.sprintBacklogId = command.sprintBacklogId();
+        this.sprintId = command.sprintId();
         this.effort = command.effort();
+        this.taskList = new TaskList();
     }
 
     /*de momento solo se puede actualizar el titulo y descripcion*/

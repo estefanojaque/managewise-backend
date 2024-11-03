@@ -17,6 +17,7 @@ public class Epic extends AuditableAbstractAggregateRoot<Epic> {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Epic() {

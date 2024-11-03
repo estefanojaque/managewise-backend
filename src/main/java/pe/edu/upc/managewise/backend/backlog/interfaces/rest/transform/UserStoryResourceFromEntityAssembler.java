@@ -5,6 +5,7 @@ import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.UserStory
 
 public class UserStoryResourceFromEntityAssembler {
     public static UserStoryResource toResourceFromEntity(UserStory entity){
-        return new UserStoryResource(entity.getId(), entity.getTitle(), entity.getDescription());
+        return new UserStoryResource(entity.getId(), entity.getTitle(), entity.getDescription()
+                , entity.getEpicId(), entity.getSprintId(), entity.getEffort());
     }
 }

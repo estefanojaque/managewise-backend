@@ -5,6 +5,7 @@ import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.CreateUse
 
 public class CreateUserStoryCommandFromResourceAssembler {
     public static CreateUserStoryCommand toCommandFromResource(CreateUserStoryResource resource){
-        return new CreateUserStoryCommand(resource.title(), resource.description());
+        return new CreateUserStoryCommand(resource.title(), resource.description(),
+                resource.epicId(), resource.sprintId(), resource.effort());
     }
 }
