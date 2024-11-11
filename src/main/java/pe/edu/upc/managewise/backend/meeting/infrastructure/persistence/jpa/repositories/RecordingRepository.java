@@ -7,6 +7,6 @@ import pe.edu.upc.managewise.backend.meeting.domain.model.entities.Recording;
 
 import java.util.List;
 
-public interface RecordingRepository extends JpaRepository<Recording, Long> {
+public interface    RecordingRepository extends JpaRepository<Recording, Long> {
     List<Recording> findByMeeting(Meeting meeting); // Buscar grabaciones por reunión
 }
