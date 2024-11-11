@@ -45,6 +45,18 @@ public class TaskList {
                 .orElse(null);
     }
 
+    public boolean isEmpty(){
+        return tasks.isEmpty();
+    }
+
+    public List<TaskItem> getTasks() {
+        return tasks;
+    }
+
+    public void addTask(TaskItem task){
+        tasks.add(task);
+    }
+
     /*
     public void updateTaskStatus(Long taskId, Status status){
         tasks.stream()
