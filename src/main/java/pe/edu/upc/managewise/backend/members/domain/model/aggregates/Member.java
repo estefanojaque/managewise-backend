@@ -56,6 +56,10 @@ public class Member extends AuditableAbstractAggregateRoot<Member> {
             throw new IllegalArgumentException("Name cannot be null");
         }
         this.personName = name;
+
+
+
+
     }
 
     public void updateEmail(EmailAddress email) {

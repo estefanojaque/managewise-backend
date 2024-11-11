@@ -1,9 +1,24 @@
-// 📁 pe/edu/upc/managewise/managewise_members/members/domain/model/valueobjects/StreetAddress.java
 package pe.edu.upc.managewise.backend.members.domain.model.valueobjects;
 
-public record StreetAddress(String street, String number, String city, String postalCode, String country) {
-    // Método para obtener la dirección en formato completo
+public record StreetAddress(String street, String city, String country) {
+
+    // Constructor with validation or custom logic
+    public StreetAddress {
+        // Custom logic or validation can go here
+        if (street == null || street.isEmpty()) {
+            throw new IllegalArgumentException("Street cannot be null or empty");
+        }
+
+        if (city == null || city.isEmpty()) {
+            throw new IllegalArgumentException("City cannot be null or empty");
+        }
+
+        if (country == null || country.isEmpty()) {
+            throw new IllegalArgumentException("Country cannot be null or empty");
+        }
+    }
+
     public String getStreetAddress() {
-        return street + " " + number + ", " + city + ", " + postalCode + ", " + country;
+        return street +  ", " + city +  ", " + country;
     }
 }
