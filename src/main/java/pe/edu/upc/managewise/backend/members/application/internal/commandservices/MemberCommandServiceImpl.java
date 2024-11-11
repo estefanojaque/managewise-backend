@@ -50,6 +50,21 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Override
+    public Optional<Member> fetchMemberById(Long id) {
+        Optional<Member> member = memberRepository.findById(id);
+        if (member.isPresent()) {
+            // Miembro encontrado, lo retornamos
+            return member;
+        } else {
+            // Si no se encuentra, retornamos un Optional vacío
+            System.out.println("Member not found with ID: " + id); // Imprime el mensaje en la consola
+            return Optional.empty();
+        }
+    }
+
+
+
+    @Override
     public Member getMemberById(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found with id: " + id));
