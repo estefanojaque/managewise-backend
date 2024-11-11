@@ -1,11 +1,9 @@
 package pe.edu.upc.managewise.backend.backlog.application.internal.commandservices;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateTaskITemByUserStoryIdCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.DeleteUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.UpdateUserStoryCommand;
+import pe.edu.upc.managewise.backend.backlog.domain.model.commands.*;
 import pe.edu.upc.managewise.backend.backlog.domain.model.entities.TaskItem;
 import pe.edu.upc.managewise.backend.backlog.domain.services.UserStoryCommandService;
 import pe.edu.upc.managewise.backend.backlog.infrastructure.persistence.jpa.repositories.UserStoryRepository;
@@ -87,5 +85,19 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }catch (Exception e){
             throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void handle(DeleteTaskCommand command){
+        var userStory = userStoryRepository.findById(command.userStoryId())
+                .orElseThrow(() -> new EntityNotFoundException("User story not found"));
+
+        var task = userStory.getTaskList().getTasks().stream()
+                .filter(t -> t.getId().equals(command.taskId()))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+
+        userStory.getTaskList().getTasks().remove(task);
+        userStoryRepository.save(userStory);
     }
 }

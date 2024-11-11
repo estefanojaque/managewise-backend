@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateTaskITemByUserStoryIdCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateTaskItemResource;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.DeleteUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.UpdateUserStoryCommand;
+import pe.edu.upc.managewise.backend.backlog.domain.model.commands.*;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetAllUserStoriesQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetUserStoryByIdQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.services.UserStoryCommandService;
@@ -82,6 +79,13 @@ public class UserStoriesController {
 
         var taskResource = TaskItemResourceFromEntityAssembler.toResourceFromEntity(createdTask);
         return new ResponseEntity<>(taskResource, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}/tasks/{taskId}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id, @PathVariable Long taskId) {
+        var deleteTaskCommand = new DeleteTaskCommand(id, taskId);
+        this.userStoryCommandService.handle(deleteTaskCommand);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/tasks")
