@@ -5,6 +5,6 @@ import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.SprintRes
 
 public class SprintResourceFromEntityAssembler {
     public static SprintResource toResourceFromEntity(Sprint sprint) {
-        return new SprintResource(sprint.getId(), sprint.getTitle(), sprint.getGoal());
+        return new SprintResource(sprint.getId(), sprint.getTitle(), sprint.getGoal(), sprint.getEndDate(), sprint.getStartDate(), sprint.getStatus());
     }
 }

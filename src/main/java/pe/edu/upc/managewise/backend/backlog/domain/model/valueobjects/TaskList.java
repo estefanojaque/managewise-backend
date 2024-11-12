@@ -57,6 +57,10 @@ public class TaskList {
         tasks.add(task);
     }
 
+    public void removeTask(Long taskId) {
+        tasks.removeIf(task -> task.getId().equals(taskId));
+    }
+
     /*
     public void updateTaskStatus(Long taskId, Status status){
         tasks.stream()

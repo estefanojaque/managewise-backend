@@ -25,6 +25,7 @@ public class UserStoryResourceFromEntityAssembler {
                 entity.getEpicId(),
                 entity.getSprintId(),
                 entity.getEffort(),
+                entity.getStatus(),
                 tasks);
     }
 }
