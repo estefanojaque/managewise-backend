@@ -25,7 +25,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     public Long handle(CreateMemberCommand command) {
-        Member member = new Member(command.personName(), command.role(), command.email(), command.address());
+        Member member = new Member(command.personName(), command.role(), command.email(), command.streetAddress());
         memberRepository.save(member);
         return member.getId();
     }
@@ -33,12 +33,12 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public Optional<Member> handle(UpdateMemberCommand command) {
         Member member = memberRepository.findById(command.memberId())
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new MemberNotFoundException("Member not found with id: " + command.memberId()));
 
-        // Asegúrate de que estos métodos existen en la clase Member
-        member.updateName(command.personName()); // Método que debes implementar en Member
-        member.updateEmail(command.email());     // Método que debes implementar en Member
-        member.updateAddress(command.address());  // Método que debes implementar en Member
+        // Asegúrate de que los métodos de actualización estén correctamente implementados
+        member.updateName(command.personName()); // Actualiza el nombre
+        member.updateEmail(command.email());     // Actualiza el correo
+        member.updateAddress(command.streetAddress());  // Actualiza la dirección
 
         memberRepository.save(member);
         return Optional.of(member);
@@ -46,23 +46,19 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     public List<Member> getAllMembers() {
-        return memberRepository.findAll(); // Suponiendo que tienes un método findAll en tu repositorio
+        return memberRepository.findAll(); // Obtener todos los miembros
     }
 
     @Override
     public Optional<Member> fetchMemberById(Long id) {
         Optional<Member> member = memberRepository.findById(id);
         if (member.isPresent()) {
-            // Miembro encontrado, lo retornamos
             return member;
         } else {
-            // Si no se encuentra, retornamos un Optional vacío
             System.out.println("Member not found with ID: " + id); // Imprime el mensaje en la consola
             return Optional.empty();
         }
     }
-
-
 
     @Override
     public Member getMemberById(Long id) {
@@ -70,9 +66,12 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 .orElseThrow(() -> new MemberNotFoundException("Member not found with id: " + id));
     }
 
-
     @Override
     public void handle(DeleteMemberCommand command) {
+        // Verificar si el miembro existe antes de eliminarlo
+        if (!memberRepository.existsById(command.memberId())) {
+            throw new MemberNotFoundException("Member not found with id: " + command.memberId());
+        }
         memberRepository.deleteById(command.memberId());
     }
 }
