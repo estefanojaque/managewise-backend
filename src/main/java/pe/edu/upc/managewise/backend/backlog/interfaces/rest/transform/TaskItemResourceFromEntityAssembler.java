@@ -9,6 +9,7 @@ public class TaskItemResourceFromEntityAssembler {
                 taskItem.getId(),
                 taskItem.getTitle(),
                 taskItem.getDescription(),
+                taskItem.getStatus(),
                 taskItem.getEstimation());
     }
 }

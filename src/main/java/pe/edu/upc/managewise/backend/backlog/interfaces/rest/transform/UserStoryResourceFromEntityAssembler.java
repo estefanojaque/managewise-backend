@@ -15,6 +15,7 @@ public class UserStoryResourceFromEntityAssembler {
                         task.getId(),
                         task.getTitle(),
                         task.getDescription(),
+                        task.getStatus(),
                         task.getEstimation()))
                 .collect(Collectors.toList());
 

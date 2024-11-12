@@ -131,4 +131,29 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }
 
     }
+
+
+    @Override
+    public Optional<TaskItem>handle(UpdateTaskItemCommand command){
+        var userStoryId = command.userStoryId();
+
+        if (!this.userStoryRepository.existsById(userStoryId)){
+            throw new IllegalArgumentException("UserStory with id " + userStoryId + " does not exist");
+        }
+
+        var userStoryToUpdateTask = this.userStoryRepository.findById(userStoryId).get();
+        userStoryToUpdateTask.getTaskList().updateTaskInformation(command.taskId(),
+                command.title(), command.description(),
+                command.status(), command.estimation());
+
+        var taskUpdated = userStoryToUpdateTask.getTaskList().getTaskItemWithTaskId(command.taskId());
+
+        try{
+            userStoryRepository.save(userStoryToUpdateTask);
+            return Optional.of(taskUpdated);
+        } catch (Exception e){
+            throw new IllegalArgumentException("Error while updating userStory: " + e.getMessage());
+        }
+    }
+
 }

@@ -32,11 +32,11 @@ public class TaskList {
         tasks.removeIf(task -> task.getId().equals(taskId));
     }
 
-    public void updateTaskInformation(Long taskId, String title, String description, Integer estimation){
+    public void updateTaskInformation(Long taskId, String title, String description, Status status, Integer estimation){
         tasks.stream()
                 .filter(task -> task.getId().equals(taskId))
                 .findFirst()
-                .ifPresent(task -> task.UpdateInformation(title, description, estimation));
+                .ifPresent(task -> task.UpdateInformation(title, description, status, estimation));
     }
 
     //getTaskItemWithTaskId
