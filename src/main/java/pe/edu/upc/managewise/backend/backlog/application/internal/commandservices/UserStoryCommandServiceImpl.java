@@ -94,31 +94,16 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }
         var userStory = userStoryOptional.get();
         var taskItem = new TaskItem(userStory, command.title(), command.description(), command.estimation());
-        userStory.getTaskList().getTasks().add(taskItem);
+        userStory.getTaskList().addTask(taskItem);
 
-        try{
+       try{
             userStoryRepository.save(userStory);
-            return taskItem.getId();
+            return userStory.getTaskList().getTasks().stream().filter(task -> task.getTitle().equals(command.title())).findFirst().get().getId();
         }catch (Exception e){
             throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
         }
-        /*var userStoryOptional = userStoryRepository.findById(command.userStoryId());
-        if (userStoryOptional.isEmpty()){
-            throw new IllegalArgumentException("UserStory with id " + command.userStoryId() + " does not exist");
-        }
-        var userStory = userStoryOptional.get();
-        var taskItem = new TaskItem(userStory, command.title(), command.description(), command.estimation());
-        userStory.getTaskList().getTasks().add(taskItem);
-
-        try{
-            userStoryRepository.save(userStory);
-            return taskItem.getId();
-        }catch (Exception e){
-            throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
-        }*/
     }
 
-    @Transactional
     @Override
     public void handle(DeleteTaskCommand command){
         var userStoryOptional = userStoryRepository.findById(command.userStoryId());
