@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface IssueRepository extends JpaRepository<Issue,Long>{
     boolean existsByTitleAndIdIsNot(String title, Long id);
-    boolean existsByTitleAndSprintAssociate(String title, int sprintAssociate);
+    boolean existsByTitleAndSprintAssociate(String title, String sprintAssociate);
     Optional<Issue> findByTitle(String title);
 }
 
