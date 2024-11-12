@@ -1,10 +1,7 @@
 package pe.edu.upc.managewise.backend.backlog.domain.services;
 
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.AddTaskITemToUserStoryTaskListCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.DeleteUserStoryCommand;
-import pe.edu.upc.managewise.backend.backlog.domain.model.commands.UpdateUserStoryCommand;
+import pe.edu.upc.managewise.backend.backlog.domain.model.commands.*;
 
 import java.util.Optional;
 
@@ -14,5 +11,6 @@ public interface UserStoryCommandService {
     void handle(DeleteUserStoryCommand command);
 
 
-    void handle(AddTaskITemToUserStoryTaskListCommand command);
+    Long handle(CreateTaskITemByUserStoryIdCommand command);
+    void handle(DeleteTaskCommand command);
 }
