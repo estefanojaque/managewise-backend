@@ -94,33 +94,19 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }
         var userStory = userStoryOptional.get();
         var taskItem = new TaskItem(userStory, command.title(), command.description(), command.estimation());
-        userStory.getTaskList().getTasks().add(taskItem);
+        userStory.getTaskList().addTask(taskItem);
 
-        try{
+       try{
             userStoryRepository.save(userStory);
-            return taskItem.getId();
+            return userStory.getTaskList().getTasks().stream().filter(task -> task.getTitle().equals(command.title())).findFirst().get().getId();
         }catch (Exception e){
             throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
         }
-        /*var userStoryOptional = userStoryRepository.findById(command.userStoryId());
-        if (userStoryOptional.isEmpty()){
-            throw new IllegalArgumentException("UserStory with id " + command.userStoryId() + " does not exist");
-        }
-        var userStory = userStoryOptional.get();
-        var taskItem = new TaskItem(userStory, command.title(), command.description(), command.estimation());
-        userStory.getTaskList().getTasks().add(taskItem);
-
-        try{
-            userStoryRepository.save(userStory);
-            return taskItem.getId();
-        }catch (Exception e){
-            throw new IllegalArgumentException("Error while adding task to userStory task list: " + e.getMessage());
-        }*/
     }
 
     @Transactional
     @Override
-    public void handle(DeleteTaskCommand command){
+    public boolean handle(DeleteTaskCommand command){
         var userStoryOptional = userStoryRepository.findById(command.userStoryId());
         if (userStoryOptional.isEmpty()){
             throw new IllegalArgumentException("UserStory with id " + command.userStoryId() + " does not exist");
@@ -130,17 +116,44 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
 
         var task = userStory.getTaskList().getTasks().stream().
                 filter(taskItem -> taskItem.getId().equals(command.taskId())).findFirst();
+
         if (task.isEmpty()){
             throw new IllegalArgumentException("Task with id " + command.taskId() + " does not exist");
         }
 
-        userStory.getTaskList().removeTask(task.get().getId());
+        userStory.getTaskList().getTasks().remove(task.get());
 
         try{
             userStoryRepository.save(userStory);
+            return true;
         }catch (Exception e){
             throw new IllegalArgumentException("Error while deleting task from userStory task list: " + e.getMessage());
         }
 
     }
+
+
+    @Override
+    public Optional<TaskItem>handle(UpdateTaskItemCommand command){
+        var userStoryId = command.userStoryId();
+
+        if (!this.userStoryRepository.existsById(userStoryId)){
+            throw new IllegalArgumentException("UserStory with id " + userStoryId + " does not exist");
+        }
+
+        var userStoryToUpdateTask = this.userStoryRepository.findById(userStoryId).get();
+        userStoryToUpdateTask.getTaskList().updateTaskInformation(command.taskId(),
+                command.title(), command.description(),
+                command.status(), command.estimation());
+
+        var taskUpdated = userStoryToUpdateTask.getTaskList().getTaskItemWithTaskId(command.taskId());
+
+        try{
+            userStoryRepository.save(userStoryToUpdateTask);
+            return Optional.of(taskUpdated);
+        } catch (Exception e){
+            throw new IllegalArgumentException("Error while updating userStory: " + e.getMessage());
+        }
+    }
+
 }

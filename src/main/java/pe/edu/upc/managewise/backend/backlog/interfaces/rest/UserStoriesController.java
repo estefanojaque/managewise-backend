@@ -6,17 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.*;
+import pe.edu.upc.managewise.backend.backlog.domain.model.entities.TaskItem;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetAllUserStoriesQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetUserStoryByIdQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.services.UserStoryCommandService;
 import pe.edu.upc.managewise.backend.backlog.domain.services.UserStoryQueryService;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.CreateUserStoryResource;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.TaskItemResource;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.UserStoryResource;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.transform.CreateUserStoryCommandFromResourceAssembler;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.transform.TaskItemResourceFromEntityAssembler;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.transform.UserStoryResourceFromEntityAssembler;
-import pe.edu.upc.managewise.backend.backlog.interfaces.rest.transform.UpdateUserStoryCommandFromResourceAssembler;
+import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.*;
+import pe.edu.upc.managewise.backend.backlog.interfaces.rest.transform.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +81,7 @@ public class UserStoriesController {
     public ResponseEntity<?> deleteTask(@PathVariable Long id, @PathVariable Long taskId) {
         var deleteTaskCommand = new DeleteTaskCommand(id, taskId);
         this.userStoryCommandService.handle(deleteTaskCommand);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -98,13 +95,24 @@ public class UserStoriesController {
         }
 
         var taskResources = optionalUserStory.get().getTaskList().getTasks().stream()
-                .map(task -> new TaskItemResource(task.getId(), task.getTitle(), task.getDescription(), task.getEstimation()))
+                .map(task -> new TaskItemResource(task.getId(), task.getTitle(), task.getDescription(), task.getStatus(), task.getEstimation()))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(taskResources);
     }
 
+    @PutMapping("/{id}/tasks/{taskId}")
+    public ResponseEntity<TaskItemResource> updateTaskItem(@PathVariable Long id, @PathVariable Long taskId, @RequestBody UpdateTaskResource resource) {
+        var updateTaskItemCommand = UpdateTaskItemCommandFromResourceAssembler.toCommandFromResource(taskId, id, resource.title(), resource.description(), resource.status(), resource.estimation());
+        var optionalTaskItem = this.userStoryCommandService.handle(updateTaskItemCommand);
 
+        if (optionalTaskItem.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var taskItemResource = TaskItemResourceFromEntityAssembler.toResourceFromEntity(optionalTaskItem.get());
+        return ResponseEntity.ok(taskItemResource);
+    }
 
     @GetMapping
     public ResponseEntity<List<UserStoryResource>> getAllUserStories() {
@@ -127,7 +135,8 @@ public class UserStoriesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserStoryResource> updateUserStory(@PathVariable Long id, @RequestBody UserStoryResource resource) {
+    /*public ResponseEntity<UserStoryResource> updateUserStory(@PathVariable Long id, @RequestBody UserStoryResource resource) {
+    */public ResponseEntity<UserStoryResource> updateUserStory(@PathVariable Long id, @RequestBody UpdateUserStoryResource resource) {
         var updateUserStoryCommand = UpdateUserStoryCommandFromResourceAssembler.toCommandFromResource(id, resource);
         var optionalUserStory = this.userStoryCommandService.handle(updateUserStoryCommand);
 
