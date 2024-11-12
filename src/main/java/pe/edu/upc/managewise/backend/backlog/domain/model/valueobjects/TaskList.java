@@ -1,15 +1,17 @@
 package pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
 import pe.edu.upc.managewise.backend.backlog.domain.model.entities.TaskItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Embeddable
 public class TaskList {
-    @OneToMany(mappedBy = "userStory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userStory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskItem> tasks;
 
     public TaskList(){
@@ -30,11 +32,11 @@ public class TaskList {
         tasks.removeIf(task -> task.getId().equals(taskId));
     }
 
-    public void updateTaskInformation(Long taskId, String title, String description, Integer estimation){
+    public void updateTaskInformation(Long taskId, String title, String description, Status status, Integer estimation){
         tasks.stream()
                 .filter(task -> task.getId().equals(taskId))
                 .findFirst()
-                .ifPresent(task -> task.UpdateInformation(title, description, estimation));
+                .ifPresent(task -> task.UpdateInformation(title, description, status, estimation));
     }
 
     //getTaskItemWithTaskId
@@ -47,10 +49,6 @@ public class TaskList {
 
     public boolean isEmpty(){
         return tasks.isEmpty();
-    }
-
-    public List<TaskItem> getTasks() {
-        return tasks;
     }
 
     public void addTask(TaskItem task){
