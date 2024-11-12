@@ -12,5 +12,5 @@ public interface UserStoryCommandService {
 
 
     Long handle(CreateTaskITemByUserStoryIdCommand command);
-    void handle(DeleteTaskCommand command);
+    boolean handle(DeleteTaskCommand command);
 }

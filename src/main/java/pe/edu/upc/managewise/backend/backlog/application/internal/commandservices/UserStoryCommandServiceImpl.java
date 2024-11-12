@@ -104,8 +104,9 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }
     }
 
+    @Transactional
     @Override
-    public void handle(DeleteTaskCommand command){
+    public boolean handle(DeleteTaskCommand command){
         var userStoryOptional = userStoryRepository.findById(command.userStoryId());
         if (userStoryOptional.isEmpty()){
             throw new IllegalArgumentException("UserStory with id " + command.userStoryId() + " does not exist");
@@ -115,14 +116,16 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
 
         var task = userStory.getTaskList().getTasks().stream().
                 filter(taskItem -> taskItem.getId().equals(command.taskId())).findFirst();
+
         if (task.isEmpty()){
             throw new IllegalArgumentException("Task with id " + command.taskId() + " does not exist");
         }
 
-        userStory.getTaskList().removeTask(task.get().getId());
+        userStory.getTaskList().getTasks().remove(task.get());
 
         try{
             userStoryRepository.save(userStory);
+            return true;
         }catch (Exception e){
             throw new IllegalArgumentException("Error while deleting task from userStory task list: " + e.getMessage());
         }

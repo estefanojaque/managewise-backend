@@ -85,6 +85,7 @@ public class UserStoriesController {
     public ResponseEntity<?> deleteTask(@PathVariable Long id, @PathVariable Long taskId) {
         var deleteTaskCommand = new DeleteTaskCommand(id, taskId);
         this.userStoryCommandService.handle(deleteTaskCommand);
+
         return ResponseEntity.noContent().build();
     }
 

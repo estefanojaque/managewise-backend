@@ -1,15 +1,17 @@
 package pe.edu.upc.managewise.backend.backlog.domain.model.valueobjects;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
 import pe.edu.upc.managewise.backend.backlog.domain.model.entities.TaskItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Embeddable
 public class TaskList {
-    @OneToMany(mappedBy = "userStory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userStory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskItem> tasks;
 
     public TaskList(){
@@ -47,10 +49,6 @@ public class TaskList {
 
     public boolean isEmpty(){
         return tasks.isEmpty();
-    }
-
-    public List<TaskItem> getTasks() {
-        return tasks;
     }
 
     public void addTask(TaskItem task){
