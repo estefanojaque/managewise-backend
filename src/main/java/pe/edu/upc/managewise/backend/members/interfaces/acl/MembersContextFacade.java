@@ -90,7 +90,7 @@ public class MembersContextFacade {
      */
     public Long createMember(String fullName, String role, String address, String email) {
         // Crear el nombre completo
-        PersonName personName = new PersonName(fullName.split(" ")[0], fullName.split(" ")[1]);
+        PersonName personName = new PersonName(fullName.split(" ")[0]);
 
         // Convertir el rol a ScrumRoles
         ScrumRoles scrumRole = ScrumRoles.valueOf(role.toUpperCase());
@@ -103,9 +103,7 @@ public class MembersContextFacade {
 
         // Crear la dirección
         StreetAddress streetAddress = new StreetAddress(
-                addressParts[0].trim(),
-                addressParts[1].trim(),
-                addressParts[2].trim()
+                addressParts[0].trim()
         );
 
         // Crear el correo
@@ -142,7 +140,7 @@ public class MembersContextFacade {
      */
     public Long updateMember(Long memberId, String fullName, String role, String address, String email) {
         // Crear los objetos necesarios para el comando
-        PersonName personName = new PersonName(fullName.split(" ")[0], fullName.split(" ")[1]);
+        PersonName personName = new PersonName(fullName.split(" ")[0]);
         ScrumRoles scrumRole = ScrumRoles.valueOf(role.toUpperCase());
 
         // Split address into parts (similar to how you handle it during creation)
@@ -153,9 +151,7 @@ public class MembersContextFacade {
 
         // Crear la dirección
         StreetAddress streetAddress = new StreetAddress(
-                addressParts[0].trim(),
-                addressParts[1].trim(),
-                addressParts[2].trim()
+                addressParts[0].trim()
         );
 
         // Crear el correo

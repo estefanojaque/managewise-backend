@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-     Optional<Member> findByPersonName_FirstNameAndPersonName_LastName(String firstName, String lastName);
+     Optional<Member> findByPersonNameFullName(String fullName);  // Cambié el nombre del método
 
 }
