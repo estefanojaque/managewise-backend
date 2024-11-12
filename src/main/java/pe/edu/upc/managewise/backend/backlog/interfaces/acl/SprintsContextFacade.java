@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.Sprint;
 import pe.edu.upc.managewise.backend.backlog.domain.model.commands.CreateSprintCommand;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetSprintByIdQuery;
+import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetSprintByTittleQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.services.SprintCommandService;
 import pe.edu.upc.managewise.backend.backlog.domain.services.SprintQueryService;
 import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.SprintResource;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 @Service
 public class SprintsContextFacade {
+
+    //DI
     private final SprintCommandService sprintCommandService;
     private final SprintQueryService sprintQueryService;
 
@@ -31,4 +34,29 @@ public class SprintsContextFacade {
         return Optional.of(sprintResource);
     }
 
+    public Long fetchSprintIdByTittle(String tittle){
+        //1. Create Query and call handle
+        var getSprintByTittleQuery = new GetSprintByTittleQuery(tittle);
+        var optionalProfile = sprintQueryService.handle(getSprintByTittleQuery);
+        //2. validation
+        //si no lo encuentro retorno 0Long
+        if (optionalProfile.isEmpty()) {
+            return 0L;
+        }
+        //3. response
+        //en caso si existe retorno el id
+        return optionalProfile.get().getId();
+    }
+
+    //Devolvere un true o false
+    public boolean existsSprintByTittleAndIdIsNot(String tittle, Long id) {
+        //1. create query and call handle
+        var getSprintByTittleQuery = new GetSprintByTittleQuery(tittle);
+        var optionalSprint = sprintQueryService.handle(getSprintByTittleQuery);
+        //2. validation and return
+        if (optionalSprint.isEmpty()) {
+            return false;
+        }
+        return optionalSprint.get().getId() != id;
+    }
 }

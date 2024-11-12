@@ -19,10 +19,8 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
     private String title;
 
     @Getter
-    @Min(0)
-    @Max(6)
-    @Column(name = "sprint_associate", columnDefinition = "smallint", nullable = false)
-    private int sprintAssociate;
+    @Column(name = "sprint_associate", nullable = false)
+    private String sprintAssociate;
 
     @Getter
     @NotNull
@@ -78,7 +76,7 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
         this.eventRecord = new EventRecord();
     }
 
-    public Issue(String title, int sprintAssociate, String description, String status,String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
+    public Issue(String title, String sprintAssociate, String description, String status,String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
         this.title = title;
         this.sprintAssociate = sprintAssociate;
         this.description = description;
@@ -124,7 +122,7 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
     this.eventRecord = new EventRecord();
   }
 
-  public Issue updateInformation(String title, int sprintAssociate , String description, String status, String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
+  public Issue updateInformation(String title, String sprintAssociate , String description, String status, String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
     this.title = title;
     this.sprintAssociate = sprintAssociate;
     this.description = description;

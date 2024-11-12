@@ -4,7 +4,7 @@ import java.util.List;
 
 public record CreateIssueResource(
         String title,
-        int sprintAssociate,
+        String sprintAssociate,
         String description,
         String status,
         String priority,
