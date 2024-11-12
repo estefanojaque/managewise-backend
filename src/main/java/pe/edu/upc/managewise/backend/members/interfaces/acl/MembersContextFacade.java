@@ -41,7 +41,6 @@ public class MembersContextFacade {
     }
 
 
-
     /**
      * Obtiene el ID de un miembro basado en su nombre completo.
      *
@@ -62,8 +61,6 @@ public class MembersContextFacade {
         // Si no se encuentra el miembro, devolvemos 0L
         return 0L;
     }
-
-
 
     /**
      * Verifica si existe un miembro con un nombre completo y un ID distinto.

@@ -1,5 +1,7 @@
 package pe.edu.upc.managewise.backend.issues.application.internal.commandservices;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.managewise.backend.issues.application.internal.outboundservices.acl.ExternalMemberService;
+import pe.edu.upc.managewise.backend.issues.application.internal.outboundservices.acl.ExternalSprintService;
 import pe.edu.upc.managewise.backend.issues.domain.model.aggregates.Issue;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.CreateEventByIssueIdCommand;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.CreateIssueCommand;
@@ -16,8 +18,12 @@ import java.util.Optional;
 public class IssueCommandServiceImpl implements IssueCommandService {
     //Dependency Injection
     private final IssueRepository issueRepository;
-    public IssueCommandServiceImpl(IssueRepository issueRepository){
+    private final ExternalSprintService externalSprintService;
+    private final ExternalMemberService externalMemberService;
+    public IssueCommandServiceImpl(IssueRepository issueRepository, ExternalSprintService externalSprintService, ExternalMemberService externalMemberService) {
         this.issueRepository = issueRepository;
+        this.externalSprintService = externalSprintService;
+        this.externalMemberService = externalMemberService;
     }
 
     //CreateIssueCommand
@@ -25,8 +31,13 @@ public class IssueCommandServiceImpl implements IssueCommandService {
     public Long handle(CreateIssueCommand command) {
         //Constrains
         //Condition so that there is no same Issue title in the same Sprint
+        var assignedToId = this.externalMemberService.fetchMemberIdByFullName(command.assignedTo());
+        var madeById = this.externalMemberService.fetchMemberIdByFullName(command.madeBy());
+        var sprintId = this.externalSprintService.fetchSprintIdByTittle(command.sprintAssociate());
         var title = command.title();
         var sprintAssociate = command.sprintAssociate();
+        var madeBy = command.madeBy();
+        var assignedTo = command.assignedTo();
         if (this.issueRepository.existsByTitleAndSprintAssociate(title,sprintAssociate)) {
             throw new IllegalArgumentException("Issue with title " + title + " on Sprint "+ sprintAssociate + " already exists");
         }
@@ -36,6 +47,16 @@ public class IssueCommandServiceImpl implements IssueCommandService {
             this.issueRepository.save(issue);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving issue: " + e.getMessage());
+        }
+        //connection wit other bounded context
+        if(sprintId.isEmpty()) {
+            throw new IllegalArgumentException("Sprint with title " + sprintAssociate + " does not exist");
+        }
+        if(assignedToId.isEmpty()) {
+            throw new IllegalArgumentException("member " + assignedTo +" to which the Issue is being assigned does not exist");
+        }
+        if(madeById.isEmpty()) {
+            throw new IllegalArgumentException("member " + madeBy +" to which the Issue is being created does not exist");
         }
         return issue.getId();
     }
@@ -97,7 +118,7 @@ public class IssueCommandServiceImpl implements IssueCommandService {
 
         try {
             issueRepository.save(issue);
-            return eventRecordItem.getId();
+            return issue.getEventRecord().getEventRecordItems().stream().filter(event -> event.getEventName().equals(eventRecordItem.getEventName())).findFirst().get().getId();
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving event: " + e.getMessage());
         }
