@@ -16,6 +16,7 @@ import pe.edu.upc.managewise.backend.members.domain.model.valueobjects.StreetAdd
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MembersContextFacade {
@@ -41,13 +42,18 @@ public class MembersContextFacade {
     }
 
   public List<Long> fetchAllMemberIds() {
-    // Implementación para obtener todos los miembros desde la base de datos o servicio
-    // Retorna una lista de Long con los IDs de los miembros
-    return List.of(1L, 2L, 3L, 4L); // Ejemplo con IDs ficticios
+    // Obtiene todos los miembros desde la base de datos o servicio
+    List<Member> members = memberQueryService.findAll(); // Obtener todos los miembros
+
+    // Extrae y retorna solo los IDs de los miembros
+    return members.stream()
+      .map(Member::getId) // Extrae el ID de cada miembro
+      .collect(Collectors.toList()); // Devuelve la lista de IDs
   }
 
 
-    /**
+
+  /**
      * Obtiene el ID de un miembro basado en su nombre completo.
      *
      * @param fullName El nombre completo del miembro.
