@@ -40,6 +40,12 @@ public class MembersContextFacade {
         return optionalMember.map(MemberResourceFromEntityAssembler::toResource);
     }
 
+  public List<Long> fetchAllMemberIds() {
+    // Implementación para obtener todos los miembros desde la base de datos o servicio
+    // Retorna una lista de Long con los IDs de los miembros
+    return List.of(1L, 2L, 3L, 4L); // Ejemplo con IDs ficticios
+  }
+
 
     /**
      * Obtiene el ID de un miembro basado en su nombre completo.
