@@ -1,7 +1,6 @@
 package pe.edu.upc.managewise.backend.issues.interfaces.rest.transform;
 
 import pe.edu.upc.managewise.backend.issues.domain.model.aggregates.Issue;
-import pe.edu.upc.managewise.backend.issues.domain.model.entities.EventRecordItem;
 import pe.edu.upc.managewise.backend.issues.interfaces.rest.resources.EventRecordItemResource;
 import pe.edu.upc.managewise.backend.issues.interfaces.rest.resources.IssueResource;
 

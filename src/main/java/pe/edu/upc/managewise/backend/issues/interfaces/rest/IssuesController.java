@@ -1,8 +1,6 @@
 package pe.edu.upc.managewise.backend.issues.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.CreateEventByIssueIdCommand;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.CreateEventResource;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.DeleteIssueCommand;
-import pe.edu.upc.managewise.backend.issues.domain.model.queries.GetAllEventIssueItemByIssueId;
 import pe.edu.upc.managewise.backend.issues.domain.model.queries.GetAllIssuesQuery;
 import pe.edu.upc.managewise.backend.issues.domain.model.queries.GetIssueByIdQuery;
 import pe.edu.upc.managewise.backend.issues.domain.services.IssueCommandService;
@@ -23,11 +20,7 @@ import pe.edu.upc.managewise.backend.issues.interfaces.rest.transform.EventRecor
 import pe.edu.upc.managewise.backend.issues.interfaces.rest.transform.IssueResourceFromEntityAssembler;
 import pe.edu.upc.managewise.backend.issues.interfaces.rest.transform.UpdateIssueCommandFromResourceAssembler;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins="*",methods = {RequestMethod.POST,RequestMethod.GET,RequestMethod.PUT,RequestMethod.DELETE})

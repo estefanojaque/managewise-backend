@@ -1,4 +1,5 @@
 package pe.edu.upc.managewise.backend.issues.application.internal.commandservices;
+
 import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.issues.application.internal.outboundservices.acl.ExternalMemberService;
 import pe.edu.upc.managewise.backend.issues.application.internal.outboundservices.acl.ExternalSprintService;
@@ -10,7 +11,6 @@ import pe.edu.upc.managewise.backend.issues.domain.model.commands.UpdateIssueCom
 import pe.edu.upc.managewise.backend.issues.domain.model.entities.EventRecordItem;
 import pe.edu.upc.managewise.backend.issues.domain.services.IssueCommandService;
 import pe.edu.upc.managewise.backend.issues.infrastructure.persistence.jpa.issues.IssueRepository;
-
 
 import java.util.Optional;
 

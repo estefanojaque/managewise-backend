@@ -1,7 +1,6 @@
 package pe.edu.upc.managewise.backend.issues.application.internal.outboundservices.acl;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.managewise.backend.backlog.interfaces.acl.SprintsContextFacade;
 import pe.edu.upc.managewise.backend.members.interfaces.acl.MembersContextFacade;
 
 import java.util.Optional;
