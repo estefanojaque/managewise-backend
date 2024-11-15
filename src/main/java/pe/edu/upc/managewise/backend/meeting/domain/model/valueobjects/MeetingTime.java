@@ -1,5 +1,5 @@
+// src/main/java/pe/edu/upc/managewise/backend/meeting/domain/model/valueobjects/MeetingTime.java
 package pe.edu.upc.managewise.backend.meeting.domain.model.valueobjects;
-
 
 import jakarta.persistence.Embeddable;
 
@@ -23,5 +23,10 @@ public record MeetingTime(LocalTime time) {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid time format: " + timeStr);
         }
+    }
+
+    @Override
+    public String toString() {
+        return time.toString(); // Formato ISO 8601
     }
 }
