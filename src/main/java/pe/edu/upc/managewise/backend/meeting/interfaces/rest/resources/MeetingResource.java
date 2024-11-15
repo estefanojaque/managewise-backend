@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.List;
 
+import java.util.List;
+
 public record MeetingResource(
         Long id,
         String title,

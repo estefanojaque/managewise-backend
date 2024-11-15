@@ -5,6 +5,6 @@ import pe.edu.upc.managewise.backend.backlog.interfaces.rest.resources.CreateSpr
 
 public class CreateSprintCommandFromResourceAssembler {
     public static CreateSprintCommand toCommandFromResource(CreateSprintResource resource){
-        return new CreateSprintCommand(resource.title(), resource.goal());
+        return new CreateSprintCommand(resource.title(), resource.goal(), resource.endDate());
     }
 }

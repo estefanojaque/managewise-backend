@@ -35,16 +35,16 @@ public class Member extends AuditableAbstractAggregateRoot<Member> {
 
     @Getter
     @Embedded
-    private StreetAddress address;
+    private StreetAddress streetAddress;
 
-    public Member(PersonName personName, ScrumRoles role, EmailAddress email, StreetAddress address) {
-        if (personName == null || role == null || email == null || address == null) {
+    public Member(PersonName personName, ScrumRoles role, EmailAddress email, StreetAddress streetAddress) {
+        if (personName == null || role == null || email == null || streetAddress == null) {
             throw new IllegalArgumentException("Los campos no pueden ser nulos");
         }
         this.personName = personName;
         this.role = role;
         this.email = email;
-        this.address = address;
+        this.streetAddress = streetAddress;
     }
 
     public void updateRole(ScrumRoles role) {
@@ -56,6 +56,10 @@ public class Member extends AuditableAbstractAggregateRoot<Member> {
             throw new IllegalArgumentException("Name cannot be null");
         }
         this.personName = name;
+
+
+
+
     }
 
     public void updateEmail(EmailAddress email) {
@@ -65,11 +69,11 @@ public class Member extends AuditableAbstractAggregateRoot<Member> {
         this.email = email;
     }
 
-    public void updateAddress(StreetAddress address) {
-        if (address == null) {
+    public void updateAddress(StreetAddress streetAddress) {
+        if (streetAddress == null) {
             throw new IllegalArgumentException("Address cannot be null");
         }
-        this.address = address;
+        this.streetAddress = streetAddress;
     }
 
     public Long getId() {

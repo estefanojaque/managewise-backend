@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.backlog.domain.model.aggregates.UserStory;
 import pe.edu.upc.managewise.backend.backlog.domain.model.entities.TaskItem;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetAllUserStoriesQuery;
-import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetTaskItemByUserStoryIdAndTaskIdQuery;
+import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetAllTaskItemsByUserStoryIdQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.model.queries.GetUserStoryByIdQuery;
 import pe.edu.upc.managewise.backend.backlog.domain.services.UserStoryQueryService;
 import pe.edu.upc.managewise.backend.backlog.infrastructure.persistence.jpa.repositories.UserStoryRepository;
@@ -31,7 +31,7 @@ public class UserStoryQueryServiceImpl implements UserStoryQueryService {
     }
 
     @Override
-    public Optional<TaskItem> handle(GetTaskItemByUserStoryIdAndTaskIdQuery query){
-        return this.userStoryRepository.findById(query.userStoryId()).map(userStory -> userStory.getTaskList().getTaskItemWithTaskId(query.taskId()));
+    public List<TaskItem> handle(GetAllTaskItemsByUserStoryIdQuery query){
+        return List.of();
     }
 }

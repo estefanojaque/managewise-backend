@@ -12,7 +12,7 @@ public class MemberResourceFromEntityAssembler {
                 member.getId(), // Agrega el ID aquí
                 member.getPersonName(),
                 member.getEmail(),
-                member.getAddress(),
+                member.getStreetAddress(),
                 member.getRole()
         );
     }

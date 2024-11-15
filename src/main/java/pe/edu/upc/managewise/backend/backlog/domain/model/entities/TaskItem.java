@@ -29,17 +29,17 @@ public class TaskItem extends AuditableModel {
     public TaskItem(UserStory userStory, String title, String description, Integer estimation){
         this.title = title;
         this.description = description;
-        this.status = Status.TO_DO;
+        this.status = Status.TO_DO; //-----
         this.userStory = userStory;
         this.estimation = estimation;
     }
 
     //falta adicionar status al update
-    public void UpdateInformation(String title, String description, Integer estimation){
+    public void UpdateInformation(String title, String description, Status status, Integer estimation){
         this.title = title;
         this.description = description;
         this.estimation = estimation;
-        //this.status = Status.valueOf(status);
+        this.status = status;
     }
 
     /*metodo para cambiar solo el status*/

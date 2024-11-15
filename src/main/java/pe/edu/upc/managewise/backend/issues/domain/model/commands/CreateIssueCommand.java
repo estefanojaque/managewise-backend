@@ -4,5 +4,5 @@ import pe.edu.upc.managewise.backend.issues.interfaces.rest.resources.EventRecor
 
 import java.util.List;
 
-public record CreateIssueCommand(String title, int sprintAssociate , String description, String status, String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate, List<EventRecordItemResource> history) {
+public record CreateIssueCommand(String title, String sprintAssociate , String description, String status, String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate, List<EventRecordItemResource> history) {
 }
