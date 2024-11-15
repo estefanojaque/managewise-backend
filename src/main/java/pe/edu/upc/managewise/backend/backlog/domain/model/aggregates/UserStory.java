@@ -72,9 +72,14 @@ public class UserStory extends AuditableAbstractAggregateRoot<UserStory> {
     }
 
     /*de momento solo se puede actualizar el titulo y descripcion*/
-    public UserStory updateInformation(String title, String description){
+    public UserStory updateInformation(String title, String description,
+                                       Long epicId, Long sprintId, Status status, Integer effort) {
         this.title = title;
         this.description = description;
+        this.epicId = epicId;
+        this.sprintId = sprintId;
+        this.status = status;
+        this.effort = effort;
         return this;
     }
 

@@ -8,6 +8,6 @@ public class UpdateUserStoryCommandFromResourceAssembler {
     //public static UpdateUserStoryCommand toCommandFromResource(Long id, UserStoryResource resource){
     public static UpdateUserStoryCommand toCommandFromResource(Long id, UpdateUserStoryResource resource){
         return new UpdateUserStoryCommand(id, resource.title(), resource.description(),
-                resource.epicId(), resource.sprintId(), resource.effort());
+                resource.epicId(), resource.sprintId(), resource.status(),resource.effort());
     }
 }
