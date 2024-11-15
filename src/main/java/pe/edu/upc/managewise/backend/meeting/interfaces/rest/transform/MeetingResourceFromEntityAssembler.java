@@ -6,25 +6,27 @@ import pe.edu.upc.managewise.backend.meeting.interfaces.rest.resources.Recording
 
 public class MeetingResourceFromEntityAssembler {
 
-    public static MeetingResource toResourceFromEntity(Meeting entity) {
-        RecordingResource recordingResource = null;
-        if (entity.getRecordings() != null && !entity.getRecordings().isEmpty()) {
-            var recording = entity.getRecordings().get(0);
-            recordingResource = new RecordingResource(
-                    recording.getRecordingLink(),
-                    recording.getDuration(),
-                    recording.isPublicAccess()
-            );
-        }
-
-        return new MeetingResource(
-                entity.getId(),
-                entity.getTitle(),
-                entity.getMeetingDate().toString(),
-                entity.getMeetingTime().toString(),
-                entity.getLink(),
-                entity.getAccessCode(),
-                recordingResource
-        );
+  public static MeetingResource toResourceFromEntity(Meeting entity) {
+    RecordingResource recordingResource = null;
+    if (entity.getRecordings() != null && !entity.getRecordings().isEmpty()) {
+      var recording = entity.getRecordings().get(0);
+      recordingResource = new RecordingResource(
+        recording.getRecordingLink(),
+        recording.getDuration(),
+        recording.isPublicAccess()
+      );
     }
+
+    return new MeetingResource(
+      entity.getId(),
+      entity.getTitle(),
+      entity.getMeetingDate().toString(),
+      entity.getMeetingTime().toString(),
+      entity.getLink(),
+      entity.getAccessCode(),
+      recordingResource,
+      entity.getHostId(),
+      entity.getMembers() // No se necesita mapear, ya que es una lista de Long
+    );
+  }
 }

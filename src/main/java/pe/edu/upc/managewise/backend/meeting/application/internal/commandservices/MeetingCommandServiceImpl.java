@@ -3,6 +3,7 @@ package pe.edu.upc.managewise.backend.meeting.application.internal.commandservic
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.managewise.backend.meeting.application.internal.outboundservices.acl.MeetingExternalMemberService;
 import pe.edu.upc.managewise.backend.meeting.domain.model.aggregates.Meeting;
 import pe.edu.upc.managewise.backend.meeting.domain.model.commands.CreateMeetingCommand;
 import pe.edu.upc.managewise.backend.meeting.domain.model.commands.CreateRecordingCommand;
@@ -12,18 +13,22 @@ import pe.edu.upc.managewise.backend.meeting.domain.services.MeetingCommandServi
 import pe.edu.upc.managewise.backend.meeting.domain.services.RecordingCommandService;
 import pe.edu.upc.managewise.backend.meeting.infrastructure.persistence.jpa.repositories.MeetingRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class MeetingCommandServiceImpl implements MeetingCommandService {
 
     private final MeetingRepository meetingRepository;
     private final RecordingCommandService recordingCommandService; // Declarar la variable aquí
+  private final MeetingExternalMemberService externalMemberService; // Servicio para obtener miembros
 
     @Autowired
-    public MeetingCommandServiceImpl(MeetingRepository meetingRepository, RecordingCommandService recordingCommandService) {
+    public MeetingCommandServiceImpl(MeetingRepository meetingRepository, RecordingCommandService recordingCommandService,MeetingExternalMemberService externalMemberService) {
         this.meetingRepository = meetingRepository;
         this.recordingCommandService = recordingCommandService; // Inicializar la variable aquí
+      this.externalMemberService = externalMemberService; // Inicializar el servicio
     }
 
     @Override
@@ -33,8 +38,20 @@ public class MeetingCommandServiceImpl implements MeetingCommandService {
             throw new IllegalArgumentException("Meeting with title " + meetingTitle + " already exists");
         }
 
+      List<Long> memberIds = externalMemberService.fetchAllMemberIds();
+      if (memberIds.isEmpty()) {
+        throw new IllegalArgumentException("No members found");
+      }
+      // Seleccionar un host aleatorio de la lista de miembros
+      Long hostId = memberIds.get(new Random().nextInt(memberIds.size()));
+
         var meeting = new Meeting(command);
-        try {
+
+      meeting.setHostId(hostId); // Establecer el host
+
+      // Establecer la lista de miembros (todos los miembros)
+      meeting.setMembers(memberIds);
+      try {
             this.meetingRepository.save(meeting);
 
             // Crear la grabación automáticamente
