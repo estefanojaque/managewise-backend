@@ -35,10 +35,10 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         if(this.userStoryRepository.existsByTitle(title)){
             throw new IllegalArgumentException("UserStory with " + title + " as title already exists");
         }
-        if(!this.sprintRepository.existsById(command.sprintId())){
+        if(!this.sprintRepository.existsById(command.sprintId()) && command.sprintId()!=0){
             throw new IllegalArgumentException("Sprint with id " + command.sprintId() + " does not exist");
         }
-        if(!this.epicRepository.existsById(command.epicId())){
+        if(!this.epicRepository.existsById(command.epicId()) && command.epicId()!=0){
             throw new IllegalArgumentException("Epic with id " + command.epicId() + " does not exist");
         }
         var userStory = new UserStory(command);
@@ -63,7 +63,8 @@ public class UserStoryCommandServiceImpl implements UserStoryCommandService {
         }
 
         var userStoryTopUpdate = this.userStoryRepository.findById(userStoryId).get();
-        userStoryTopUpdate.updateInformation(command.title(), command.description());
+        userStoryTopUpdate.updateInformation(command.title(), command.description(),
+                command.epicId(), command.SprintId(), command.status(), command.effort());
 
         try{
             var updatedUserStory = this.userStoryRepository.save(userStoryTopUpdate);
