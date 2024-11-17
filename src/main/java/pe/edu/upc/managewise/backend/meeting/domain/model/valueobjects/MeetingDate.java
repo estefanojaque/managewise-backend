@@ -1,3 +1,4 @@
+// src/main/java/pe/edu/upc/managewise/backend/meeting/domain/model/valueobjects/MeetingDate.java
 package pe.edu.upc.managewise.backend.meeting.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
@@ -23,6 +24,10 @@ public record MeetingDate(LocalDate date) {
             throw new IllegalArgumentException("Invalid date format: " + dateStr);
         }
     }
-}
 
+    @Override
+    public String toString() {
+        return date.toString(); // Formato ISO 8601
+    }
+}
 

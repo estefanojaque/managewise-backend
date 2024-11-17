@@ -9,6 +9,7 @@ public record UpdateUserStoryResource(
         String description,
         Long epicId,
         Long sprintId,
+        Status status,
         Integer effort
 ) {
 }

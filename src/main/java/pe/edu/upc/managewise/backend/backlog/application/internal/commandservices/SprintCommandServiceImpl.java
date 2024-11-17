@@ -47,7 +47,7 @@ public class SprintCommandServiceImpl implements SprintCommandService {
         }
 
         var sprintToUpdate = this.sprintRepository.findById(sprintId).get();
-        sprintToUpdate.updateInformation(command.title(), command.goal());
+        sprintToUpdate.updateInformation(command.title(), command.goal(), command.status());
 
         try{
             var updatedSprint = this.sprintRepository.save(sprintToUpdate);
