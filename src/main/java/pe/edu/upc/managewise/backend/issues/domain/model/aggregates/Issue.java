@@ -1,12 +1,12 @@
 package pe.edu.upc.managewise.backend.issues.domain.model.aggregates;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.managewise.backend.issues.domain.model.commands.CreateIssueCommand;
 import pe.edu.upc.managewise.backend.issues.domain.model.valueobjects.EventRecord;
+import pe.edu.upc.managewise.backend.issues.domain.model.valueobjects.IssuePriorities;
+import pe.edu.upc.managewise.backend.issues.domain.model.valueobjects.IssueStatuses;
 import pe.edu.upc.managewise.backend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 @Entity
@@ -28,22 +28,27 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
     @Column(name = "description", length = 300, nullable = false)
     private String description;
 
-
     @Getter
     @NotNull
-    @NotBlank
-    @Column(name = "status", length = 20, nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 10, nullable = false)
+    private IssueStatuses status;
 
     //private IssueStatus status;
 
+    /*
     @Getter
     @NotNull
     @NotBlank
     @Column(name = "priority", length = 10, nullable = false)
-    private String priority;
+    private String priority;*/
 
-    //private IssuePriority priority;
+    @Getter
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority", length = 10, nullable = false)
+    private IssuePriorities priority;
+
 
     @Getter
     @NotNull
@@ -74,9 +79,10 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
 
     public Issue() {
         this.eventRecord = new EventRecord();
+        this.priority = IssuePriorities.MEDIUM;
     }
 
-    public Issue(String title, String sprintAssociate, String description, String status,String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
+    public Issue(String title, String sprintAssociate, String description, IssueStatuses status,IssuePriorities priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
         this.title = title;
         this.sprintAssociate = sprintAssociate;
         this.description = description;
@@ -122,7 +128,7 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
     this.eventRecord = new EventRecord();
   }
 
-  public Issue updateInformation(String title, String sprintAssociate , String description, String status, String priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
+  public Issue updateInformation(String title, String sprintAssociate , String description, IssueStatuses status, IssuePriorities priority, String assignedTo, String madeBy, String createdIn, String resolutionDate) {
     this.title = title;
     this.sprintAssociate = sprintAssociate;
     this.description = description;
