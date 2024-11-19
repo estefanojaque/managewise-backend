@@ -1,16 +1,14 @@
 package pe.edu.upc.managewise.backend.members.domain.model.valueobjects;
 
+import jakarta.persistence.Embeddable;
+@Embeddable
 public record StreetAddress(String streetAddress) {
-
-    // Constructor with validation or custom logic
-    public StreetAddress {
-        // Custom logic or validation can go here
-        if (streetAddress == null || streetAddress.isEmpty()) {
-            throw new IllegalArgumentException("Street cannot be null or empty");
-        }
+    public StreetAddress() {
+        this(null);
     }
-
-    public String getStreetAddress() {
-        return streetAddress ;
+    public StreetAddress {
+        if (streetAddress == null || streetAddress.isBlank()) {
+            throw new IllegalArgumentException("streetAddress cannot be null or blank");
+        }
     }
 }

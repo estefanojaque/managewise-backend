@@ -86,10 +86,8 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
         this.title = title;
         this.sprintAssociate = sprintAssociate;
         this.description = description;
-        //this.status = IssueStatus.TO_DO;
         this.status = status;
         this.priority = priority;
-        //this.priority = IssuePriority.MEDIUM;
         this.assignedTo = assignedTo;
         this.madeBy = madeBy;
         this.createdIn = createdIn;
@@ -97,24 +95,6 @@ public class Issue extends AuditableAbstractAggregateRoot<Issue> {
         this.eventRecord = new EventRecord();
     }
 
-    /*
-    public void to_do() {
-        this.status = IssueStatus.TO_DO;
-    }
-
-    public void in_progress() {
-        this.status = IssueStatus.IN_PROGRESS;
-    }
-
-    public void done() {
-        this.status = IssueStatus.DONE;
-    }
-
-    public String getStatus() {
-        return this.status.name().toLowerCase();
-    }
-    */
-    //---------------------------------------------------
   public Issue(CreateIssueCommand command) {
     this.title = command.title();
     this.sprintAssociate = command.sprintAssociate();

@@ -2,39 +2,56 @@ package pe.edu.upc.managewise.backend.members.interfaces.acl;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.managewise.backend.members.domain.model.aggregates.Member;
-import pe.edu.upc.managewise.backend.members.domain.model.commands.CreateMemberCommand;
-import pe.edu.upc.managewise.backend.members.domain.model.commands.DeleteMemberCommand;
-import pe.edu.upc.managewise.backend.members.domain.model.commands.UpdateMemberCommand;
-import pe.edu.upc.managewise.backend.members.domain.model.valueobjects.EmailAddress;
+import pe.edu.upc.managewise.backend.members.domain.model.queries.GetAllMembersQuery;
+import pe.edu.upc.managewise.backend.members.domain.model.queries.GetMemberByFullNameQuery;
 import pe.edu.upc.managewise.backend.members.domain.services.MemberCommandService;
 import pe.edu.upc.managewise.backend.members.domain.services.MemberQueryService;
-import pe.edu.upc.managewise.backend.members.interfaces.rest.resources.MemberResource;
-import pe.edu.upc.managewise.backend.members.interfaces.rest.transform.MemberResourceFromEntityAssembler;
-import pe.edu.upc.managewise.backend.members.domain.model.valueobjects.PersonName;
-import pe.edu.upc.managewise.backend.members.domain.model.valueobjects.ScrumRoles;
-import pe.edu.upc.managewise.backend.members.domain.model.valueobjects.StreetAddress;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class MembersContextFacade {
 
-    private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
     public MembersContextFacade(MemberCommandService memberCommandService, MemberQueryService memberQueryService) {
-        this.memberCommandService = memberCommandService;
         this.memberQueryService = memberQueryService;
     }
 
-    /**
+    public Long fetchMemberIdByFullName(String fullName) {
+        //1. Create Query and call handle
+        var getMemberByFullNameQuery = new GetMemberByFullNameQuery(fullName);
+        var optionalMember = memberQueryService.handle(getMemberByFullNameQuery);
+        //2. validation
+        //si no lo encuentro retorno 0Long
+        if (optionalMember.isEmpty()) {
+            return 0L;
+        }
+        //3. response
+        //en caso si existe retorno el id
+        return optionalMember.get().getId();
+    }
+
+    public List<Long> fetchAllMemberIds() {
+        // Create a query to get all members
+        GetAllMembersQuery query = new GetAllMembersQuery();
+
+        // Use the handle method to get all members
+        List<Member> members = memberQueryService.handle(query);
+
+        // Extract and return only the IDs of the members
+        return members.stream()
+                .map(Member::getId) // Extract the ID of each member
+                .collect(Collectors.toList()); // Return the list of IDs
+    }
+/*
+    /*
      * Obtiene un miembro por su ID.
      *
      * @param memberId El ID del miembro.
      * @return Un miembro en formato recurso.
-     */
+
     public Optional<MemberResource> fetchMemberById(Long memberId) {
         var optionalMember = memberQueryService.findById(memberId);
         // Usar el método correcto 'toResource' en lugar de 'toResourceFromEntity'
@@ -49,16 +66,16 @@ public class MembersContextFacade {
     return members.stream()
       .map(Member::getId) // Extrae el ID de cada miembro
       .collect(Collectors.toList()); // Devuelve la lista de IDs
-  }
+  }*/
 
 
 
-  /**
+  /*
      * Obtiene el ID de un miembro basado en su nombre completo.
      *
      * @param fullName El nombre completo del miembro.
      * @return El ID del miembro.
-     */
+
     public Long fetchMemberIdByFullName(String fullName) {
         // Buscar todos los miembros
         List<Member> members = memberQueryService.findAll();
@@ -72,31 +89,31 @@ public class MembersContextFacade {
 
         // Si no se encuentra el miembro, devolvemos 0L
         return 0L;
-    }
+    }*/
 
-    /**
+    /*
      * Verifica si existe un miembro con un nombre completo y un ID distinto.
      *
      * @param fullName El nombre completo del miembro.
      * @param id El ID del miembro.
      * @return true si el miembro con ese nombre existe y tiene un ID distinto, false en caso contrario.
-     */
+
     public boolean existsMemberByFullNameAndIdIsNot(String fullName, Long id) {
         Optional<Member> existingMember = memberQueryService.findAll().stream()
                 .filter(m -> m.getPersonName().getFullName().equalsIgnoreCase(fullName) && !m.getId().equals(id))
                 .findFirst();
         return existingMember.isPresent();
-    }
+    }*/
 
 
-    /**
+    /*
      * Crea un nuevo miembro.
      *
      * @param fullName El nombre completo del miembro.
      * @param role El rol del miembro.
      * @param address La dirección del miembro.
      * @return El ID del miembro creado.
-     */
+
     public Long createMember(String fullName, String role, String address, String email) {
         // Crear el nombre completo
         PersonName personName = new PersonName(fullName.split(" ")[0]);
@@ -134,11 +151,11 @@ public class MembersContextFacade {
     private Long generateMemberId() {
         // Lógica para generar el ID, si es necesario (esto depende de tu implementación)
         return 123L;  // Ejemplo de un ID generado
-    }
+    }*/
 
 
 
-    /**
+    /*
      * Actualiza un miembro existente.
      *
      * @param memberId El ID del miembro a actualizar.
@@ -146,7 +163,7 @@ public class MembersContextFacade {
      * @param role El rol actualizado.
      * @param address La dirección actualizada.
      * @return El ID del miembro actualizado.
-     */
+
     public Long updateMember(Long memberId, String fullName, String role, String address, String email) {
         // Crear los objetos necesarios para el comando
         PersonName personName = new PersonName(fullName.split(" ")[0]);
@@ -174,16 +191,16 @@ public class MembersContextFacade {
 
         // Retornar el ID del miembro actualizado
         return optionalMember.map(member -> member.getId()).orElse(0L);
-    }
+    }*/
 
 
-    /**
+    /*
      * Elimina un miembro.
      *
      * @param memberId El ID del miembro a eliminar.
-     */
+
     public void deleteMember(Long memberId) {
         var deleteMemberCommand = new DeleteMemberCommand(memberId);
         memberCommandService.handle(deleteMemberCommand);
-    }
+    }*/
 }
