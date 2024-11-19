@@ -12,9 +12,4 @@ public interface MemberCommandService {
     Long handle(CreateMemberCommand command);
     Optional<Member> handle(UpdateMemberCommand command);
     void handle(DeleteMemberCommand command);
-    Member getMemberById(Long id);
-    List<Member> getAllMembers(); // Método para obtener todos los miembros
-
-    // Método fetchMemberById que retorna un Optional<Member>
-    Optional<Member> fetchMemberById(Long id);
 }

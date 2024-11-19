@@ -149,9 +149,9 @@ public class IssuesController {
             return ResponseEntity.badRequest().build();
         //en caso que no este vacio
         //lo convierto a un profile resource
-        var profileResource = IssueResourceFromEntityAssembler.toResourceFromEntity(optionalIssue.get());
+        var issueResource = IssueResourceFromEntityAssembler.toResourceFromEntity(optionalIssue.get());
         //lo devuelvo
-        return ResponseEntity.ok(profileResource);
+        return ResponseEntity.ok(issueResource);
     }
 
     //annotacion DeleteMapping
