@@ -37,11 +37,10 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public Optional<Member> handle(UpdateMemberCommand command) {
         var memberId = command.memberId();
-        /*var fullName = command.fullName();
-        if (this.profileRepository.existsByFullNameAndIdIsNot(fullName, profileId)) {
-            throw new IllegalArgumentException("Profile with full name " + fullName + " already exists");
-        }*/
-
+        var fullName = command.fullName();
+        if (this.memberRepository.existsByFullName(fullName)) {
+            throw new IllegalArgumentException("Member with full name " + fullName + " already exists");
+        }
         // If the profile does not exist, throw an exception
         if (!this.memberRepository.existsById(memberId)) {
             throw new IllegalArgumentException("Profile with id " + memberId + " does not exist");
