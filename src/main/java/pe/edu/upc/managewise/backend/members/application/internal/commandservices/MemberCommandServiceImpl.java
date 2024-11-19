@@ -21,10 +21,10 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     public Long handle(CreateMemberCommand command) {
-       /* var fullName = command.personName();
-        if (this.profileRepository.existsByFullName(fullName)) {
-            throw new IllegalArgumentException("Profile with full name " + fullName + " already exists");
-        }*/
+        var fullName = command.fullName();
+        if (this.memberRepository.existsByFullName(fullName)) {
+            throw new IllegalArgumentException("Member with full name " + fullName + " already exists");
+        }
         var member = new Member(command);
         try {
             this.memberRepository.save(member);

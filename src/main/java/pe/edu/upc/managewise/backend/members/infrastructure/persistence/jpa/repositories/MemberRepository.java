@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
      Optional<Member> findByRole(ScrumRoles role);
      Optional<Member> findByFullName(String fullName);
+     boolean existsByFullName(String fullName);
 }
